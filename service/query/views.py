@@ -8,6 +8,7 @@ from .models import Question
 def get_question(request):
     if request.method == 'POST':
         questions_num = int(request.POST.get('questions_num', 1))
+
         for i in range(questions_num):
             while True:
                 response = requests.get('https://jservice.io/api/random')
@@ -22,16 +23,14 @@ def get_question(request):
                     Question.objects.create(id=question_id, question_text=question_text, answer_text=answer_text,
                                             created_at=created_at)
                     break
-        try:
-            question = Question.objects.latest('created_at')
-            data = {
-                'id': question.id,
-                'question_text': question.question_text,
-                'answer_text': question.answer_text,
-                'created_at': question.created_at,
-            }
-        except Question.DoesNotExist:
-            data = {}
-        return JsonResponse(data)
-    else:
-        return JsonResponse({})
+    try:
+        question = Question.objects.latest('create')
+        data = {
+            'id': question.id,
+            'question_text': question.question_text,
+            'answer_text': question.answer_text,
+            'created_at': question.created_at,
+        }
+    except Question.DoesNotExist:
+        data = {}
+    return JsonResponse(data)

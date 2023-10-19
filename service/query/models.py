@@ -6,4 +6,5 @@ class Question(models.Model):
     question_text = models.CharField(max_length=1000)
     answer_text = models.CharField(max_length=1000)
     created_at = models.DateTimeField()
+    create = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
